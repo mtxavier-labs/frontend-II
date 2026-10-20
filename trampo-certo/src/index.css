@@ -1,3 +1,14 @@
+
+/* ESTILOS GERAIS DO TRAMPO CERTO */
+
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap");
+
+:root {
+  font-family: "Quicksand", Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -5,113 +16,10 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background: #e8e8e8;
-  color: #222831;
+  min-width: 320px;
+  min-height: 100vh;
 }
 
-.navbar {
-  background: #30475e;
-  color: white;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.navbar h2 {
-  color: #f05454;
-}
-
-.navbar button {
-  margin-left: 10px;
-}
-
-button {
-  background: #f05454;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-button:hover {
-  opacity: 0.8;
-}
-
-.home {
-  text-align: center;
-  padding: 100px 20px;
-}
-
-.home h1 {
-  font-size: 50px;
-  color: #f05454;
-  margin-bottom: 20px;
-}
-
-.home h2 {
-  margin-bottom: 20px;
-}
-
-.home p {
-  margin-bottom: 30px;
-}
-
-.page {
-  padding: 50px;
-}
-
-.page h1 {
-  margin-bottom: 30px;
-}
-
-.cards {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.card {
-  background: white;
-  padding: 25px;
-  width: 280px;
-  border-radius: 10px;
-}
-
-.card h2 {
-  margin-bottom: 10px;
-}
-
-.card p {
-  margin-bottom: 10px;
-}
-
-.card button {
-  margin-top: 15px;
-}
-
-form {
-  background: white;
-  max-width: 400px;
-  padding: 30px;
-  border-radius: 10px;
-}
-
-form label {
-  display: block;
-  margin-top: 15px;
-  margin-bottom: 5px;
-}
-
-form input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-form button {
-  margin-top: 20px;
+#root {
+  min-height: 100vh;
 }
