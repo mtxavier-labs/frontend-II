@@ -1,50 +1,36 @@
-
 import { useState, useEffect } from "react";
 
-const profissionaisIniciais = [
-  {
-    id: 1,
-    nome: "Ana Souza",
-    profissao: "Garçonete",
-    avaliacao: "4.9",
-    experiencia: "3 anos",
-    disponibilidade: "Finais de semana"
-  },
-  {
-    id: 2,
-    nome: "Carlos Mendes",
-    profissao: "Cozinheiro",
-    avaliacao: "4.8",
-    experiencia: "5 anos",
-    disponibilidade: "Durante a semana"
-  },
-  {
-    id: 3,
-    nome: "Mariana Lima",
-    profissao: "Auxiliar de Eventos",
-    avaliacao: "4.7",
-    experiencia: "2 anos",
-    disponibilidade: "Horários flexíveis"
-  }
-];
+const API_URL = "http://localhost:3000/api/profissionais";
 
 function Profissionais() {
   const [profissionais, setProfissionais] = useState([]);
   const [perfilSelecionado, setPerfilSelecionado] = useState(null);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState("");
 
   useEffect(() => {
-    try {
-      const salvos = JSON.parse(
-        localStorage.getItem("profissionais") || "[]"
-      );
+    const buscarProfissionais = async () => {
+      try {
+        const resposta = await fetch(API_URL);
 
-      setProfissionais([
-        ...profissionaisIniciais,
-        ...(Array.isArray(salvos) ? salvos : [])
-      ]);
-    } catch {
-      setProfissionais(profissionaisIniciais);
-    }
+        if (!resposta.ok) {
+          throw new Error("Erro ao buscar profissionais.");
+        }
+
+        const dados = await resposta.json();
+
+        setProfissionais(dados);
+      } catch (erro) {
+        console.error("Erro ao carregar profissionais:", erro);
+        setErro(
+          "Não foi possível carregar os profissionais. Verifique se a API está funcionando."
+        );
+      } finally {
+        setCarregando(false);
+      }
+    };
+
+    buscarProfissionais();
   }, []);
 
   return (
@@ -57,39 +43,53 @@ function Profissionais() {
         </p>
       </div>
 
-      <div className="cards">
-        {profissionais.map((profissional) => (
-          <article
-            className="card card-profissional"
-            key={profissional.id}
-          >
-            <div className="profissional-avatar">
-              {profissional.nome.charAt(0).toUpperCase()}
-            </div>
+      {carregando && (
+        <p>Carregando profissionais...</p>
+      )}
 
-            <h2>{profissional.nome}</h2>
+      {erro && (
+        <p role="alert">{erro}</p>
+      )}
 
-            <p className="profissional-cargo">
-              {profissional.profissao}
-            </p>
+      {!carregando && !erro && profissionais.length === 0 && (
+        <p>Nenhum profissional cadastrado no momento.</p>
+      )}
 
-            <p className="profissional-avaliacao">
-              ⭐ {profissional.avaliacao || "Novo perfil"}
-            </p>
-
-            <p>
-              <strong>Disponibilidade:</strong>{" "}
-              {profissional.disponibilidade}
-            </p>
-
-            <button
-              onClick={() => setPerfilSelecionado(profissional)}
+      {!carregando && !erro && (
+        <div className="cards">
+          {profissionais.map((profissional) => (
+            <article
+              className="card card-profissional"
+              key={profissional._id}
             >
-              Ver perfil
-            </button>
-          </article>
-        ))}
-      </div>
+              <div className="profissional-avatar">
+                {profissional.nome.charAt(0).toUpperCase()}
+              </div>
+
+              <h2>{profissional.nome}</h2>
+
+              <p className="profissional-cargo">
+                {profissional.profissao}
+              </p>
+
+              <p className="profissional-avaliacao">
+                ⭐ {profissional.avaliacao || "Novo perfil"}
+              </p>
+
+              <p>
+                <strong>Disponibilidade:</strong>{" "}
+                {profissional.disponibilidade}
+              </p>
+
+              <button
+                onClick={() => setPerfilSelecionado(profissional)}
+              >
+                Ver perfil
+              </button>
+            </article>
+          ))}
+        </div>
+      )}
 
       {perfilSelecionado && (
         <div
@@ -123,6 +123,11 @@ function Profissionais() {
             <p>
               <strong>Profissão:</strong>{" "}
               {perfilSelecionado.profissao}
+            </p>
+
+            <p>
+              <strong>Cidade:</strong>{" "}
+              {perfilSelecionado.cidade || "Não informada"}
             </p>
 
             <p>

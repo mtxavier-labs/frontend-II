@@ -1,44 +1,12 @@
 import { useState, useEffect } from "react";
 
-const vagasIniciais = [
-  {
-    id: 1,
-    cargo: "Garçom",
-    empresa: "Hotel Floripa",
-    valor: "R$ 180"
-  },
-  {
-    id: 2,
-    cargo: "Cozinheiro",
-    empresa: "Restaurante Central",
-    valor: "R$ 220"
-  },
-  {
-    id: 3,
-    cargo: "Auxiliar de Eventos",
-    empresa: "Eventos Floripa",
-    valor: "R$ 160"
-  }
-];
+const API_URL = "http://localhost:3000/api/vagas";
 
 function Vagas() {
-  const [vagas, setVagas] = useState(() => {
-    try {
-      const salvas = localStorage.getItem("vagas");
-
-      if (salvas !== null) {
-        const lista = JSON.parse(salvas);
-
-        if (Array.isArray(lista)) {
-          return lista;
-        }
-      }
-    } catch {
-      console.log("Erro ao carregar vagas.");
-    }
-
-    return vagasIniciais;
-  });
+  const [vagas, setVagas] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [salvando, setSalvando] = useState(false);
+  const [erro, setErro] = useState("");
 
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [cargo, setCargo] = useState("");
@@ -47,8 +15,25 @@ function Vagas() {
   const [idEditando, setIdEditando] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem("vagas", JSON.stringify(vagas));
-  }, [vagas]);
+    async function carregarVagas() {
+      try {
+        const resposta = await fetch(API_URL);
+
+        if (!resposta.ok) {
+          throw new Error("Erro ao buscar vagas.");
+        }
+
+        const dados = await resposta.json();
+        setVagas(dados);
+      } catch {
+        setErro("Não foi possível carregar as vagas. Verifique se a API está funcionando.");
+      } finally {
+        setCarregando(false);
+      }
+    }
+
+    carregarVagas();
+  }, []);
 
   function limparFormulario() {
     setCargo("");
@@ -58,59 +43,126 @@ function Vagas() {
     setMostrarFormulario(false);
   }
 
-  function salvarVaga(evento) {
+  async function salvarVaga(evento) {
     evento.preventDefault();
+    setErro("");
 
-    if (idEditando !== null) {
-      setVagas(
-        vagas.map((vaga) =>
-          vaga.id === idEditando
-            ? { ...vaga, cargo, empresa, valor }
-            : vaga
-        )
-      );
-    } else {
-      const novaVaga = {
-        id: Date.now(),
-        cargo,
-        empresa,
-        valor
-      };
+    const valorNumerico = Number(valor);
 
-      setVagas([...vagas, novaVaga]);
+    if (
+      !cargo.trim() ||
+      !empresa.trim() ||
+      !valor.trim() ||
+      !Number.isFinite(valorNumerico) ||
+      valorNumerico < 0
+    ) {
+      setErro("Preencha os campos corretamente. O valor deve ser um número válido.");
+      return;
     }
 
-    limparFormulario();
+    const dadosVaga = {
+      cargo: cargo.trim(),
+      empresa: empresa.trim(),
+      valor: valorNumerico
+    };
+
+    const editando = idEditando !== null;
+    const endereco = editando
+      ? `${API_URL}/${idEditando}`
+      : API_URL;
+
+    setSalvando(true);
+
+    try {
+      const resposta = await fetch(endereco, {
+        method: editando ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dadosVaga)
+      });
+
+      if (!resposta.ok) {
+        throw new Error("Erro ao salvar vaga.");
+      }
+
+      const resultado = await resposta.json();
+
+      // O PUT devolve { mensagem, vaga }.
+      // O POST devolve diretamente a vaga.
+      const vagaSalva = editando ? resultado.vaga : resultado;
+
+      if (editando) {
+        setVagas((anteriores) =>
+          anteriores.map((vaga) =>
+            vaga._id === idEditando ? vagaSalva : vaga
+          )
+        );
+      } else {
+        setVagas((anteriores) => [...anteriores, vagaSalva]);
+      }
+
+      limparFormulario();
+    } catch {
+      setErro("Não foi possível salvar a vaga. Verifique a conexão com a API.");
+    } finally {
+      setSalvando(false);
+    }
   }
 
   function editarVaga(vaga) {
+    setErro("");
     setCargo(vaga.cargo);
     setEmpresa(vaga.empresa);
-    setValor(vaga.valor);
-    setIdEditando(vaga.id);
+    setValor(String(vaga.valor));
+    setIdEditando(vaga._id);
     setMostrarFormulario(true);
   }
 
-  function excluirVaga(id) {
+  async function excluirVaga(id) {
     const confirmar = window.confirm(
       "Deseja realmente excluir esta vaga?"
     );
 
-    if (confirmar) {
-      setVagas(vagas.filter((vaga) => vaga.id !== id));
+    if (!confirmar) return;
+
+    setErro("");
+
+    try {
+      const resposta = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE"
+      });
+
+      if (!resposta.ok) {
+        throw new Error("Erro ao excluir vaga.");
+      }
+
+      setVagas((anteriores) =>
+        anteriores.filter((vaga) => vaga._id !== id)
+      );
 
       if (idEditando === id) {
         limparFormulario();
       }
+    } catch {
+      setErro("Não foi possível excluir a vaga.");
     }
   }
 
   function publicarVaga() {
+    setErro("");
     setCargo("");
     setEmpresa("");
     setValor("");
     setIdEditando(null);
     setMostrarFormulario(true);
+  }
+
+  function formatarValor(valorVaga) {
+    return Number(valorVaga).toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+    });
   }
 
   return (
@@ -128,6 +180,12 @@ function Vagas() {
           + Publicar vaga
         </button>
       </div>
+
+      {erro && (
+        <p role="alert" className="cadastro-erro">
+          {erro}
+        </p>
+      )}
 
       {mostrarFormulario && (
         <section className="secao-formulario">
@@ -162,11 +220,13 @@ function Vagas() {
               required
             />
 
-            <label htmlFor="valor">Valor por turno</label>
+            <label htmlFor="valor">Valor por turno (R$)</label>
             <input
               id="valor"
-              type="text"
-              placeholder="Ex: R$ 180"
+              type="number"
+              min="0"
+              step="0.01"
+              placeholder="Ex: 180"
               value={valor}
               onChange={(evento) =>
                 setValor(evento.target.value)
@@ -175,16 +235,19 @@ function Vagas() {
             />
 
             <div className="formulario-acoes">
-              <button type="submit">
-                {idEditando !== null
-                  ? "Salvar alterações"
-                  : "Cadastrar vaga"}
+              <button type="submit" disabled={salvando}>
+                {salvando
+                  ? "Salvando..."
+                  : idEditando !== null
+                    ? "Salvar alterações"
+                    : "Cadastrar vaga"}
               </button>
 
               <button
                 type="button"
                 className="botao-cancelar"
                 onClick={limparFormulario}
+                disabled={salvando}
               >
                 Cancelar
               </button>
@@ -196,14 +259,17 @@ function Vagas() {
       <section className="secao-listagem">
         <h2>Vagas disponíveis ({vagas.length})</h2>
 
-        {vagas.length === 0 ? (
-          <p>
-            Nenhuma vaga disponível no momento.
-          </p>
+        {carregando ? (
+          <p>Carregando vagas...</p>
+        ) : vagas.length === 0 ? (
+          <p>Nenhuma vaga disponível no momento.</p>
         ) : (
           <div className="cards">
             {vagas.map((vaga) => (
-              <article className="card card-vaga" key={vaga.id}>
+              <article
+                className="card card-vaga"
+                key={vaga._id}
+              >
                 <span className="vaga-etiqueta">
                   Oportunidade
                 </span>
@@ -215,7 +281,7 @@ function Vagas() {
                 </p>
 
                 <p className="vaga-remuneracao">
-                  {vaga.valor}
+                  {formatarValor(vaga.valor)}
                 </p>
 
                 <div className="vaga-acoes">
@@ -236,7 +302,7 @@ function Vagas() {
 
                   <button
                     className="botao-excluir"
-                    onClick={() => excluirVaga(vaga.id)}
+                    onClick={() => excluirVaga(vaga._id)}
                   >
                     Excluir
                   </button>

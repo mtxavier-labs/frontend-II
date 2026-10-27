@@ -1,16 +1,20 @@
 import { useState } from "react";
 
+const API_URL = "http://localhost:3000/api/profissionais";
+
 function Cadastro() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
   const [tipo, setTipo] = useState("profissional");
   const [profissao, setProfissao] = useState("");
+  const [cidade, setCidade] = useState("");
   const [disponibilidade, setDisponibilidade] = useState("");
+  const [experiencia, setExperiencia] = useState("");
   const [mensagem, setMensagem] = useState("");
   const [erro, setErro] = useState("");
+  const [salvando, setSalvando] = useState(false);
 
-  function cadastrar(evento) {
+  async function cadastrar(evento) {
     evento.preventDefault();
 
     setMensagem("");
@@ -19,89 +23,102 @@ function Cadastro() {
     const nomeLimpo = nome.trim();
     const emailLimpo = email.trim().toLowerCase();
 
-    if (!nomeLimpo || !emailLimpo || !senha.trim()) {
-      setErro("Preencha todos os campos obrigatórios.");
+    if (!nomeLimpo || !emailLimpo) {
+      setErro("Preencha os campos obrigatórios.");
       return;
     }
 
-    if (tipo === "profissional" && (!profissao || !disponibilidade)) {
-      setErro("Informe sua profissão e disponibilidade.");
+    if (
+      tipo === "profissional" &&
+      (!profissao || !cidade.trim() || !disponibilidade)
+    ) {
+      setErro(
+        "Informe sua profissão, cidade e disponibilidade."
+      );
       return;
     }
+
+    setSalvando(true);
 
     try {
-      const dadosUsuarios = JSON.parse(
-        localStorage.getItem("usuarios") || "[]"
-      );
-
-      const usuarios = Array.isArray(dadosUsuarios)
-        ? dadosUsuarios
-        : [];
-
-      const emailExistente = usuarios.some(
-        (usuario) =>
-          usuario.email?.trim().toLowerCase() === emailLimpo
-      );
-
-      if (emailExistente) {
-        setErro("Este e-mail já está cadastrado.");
-        return;
-      }
-
-      const id = Date.now();
-
-      const novoUsuario = {
-        id,
-        nome: nomeLimpo,
-        email: emailLimpo,
-        senha,
-        tipo
-      };
-
-      // Mantém o cadastro de usuários criado pelo colega.
-      // Protótipo acadêmico: não usar senhas reais.
-      localStorage.setItem(
-        "usuarios",
-        JSON.stringify([...usuarios, novoUsuario])
-      );
-
-      // Mantém a integração com a página Profissionais.
       if (tipo === "profissional") {
-        const dadosProfissionais = JSON.parse(
-          localStorage.getItem("profissionais") || "[]"
+        // Envia apenas os dados do perfil profissional.
+        // Nenhuma senha é enviada ou armazenada.
+        const novoProfissional = {
+          nome: nomeLimpo,
+          profissao,
+          cidade: cidade.trim(),
+          disponibilidade,
+          experiencia: experiencia.trim()
+        };
+
+        const resposta = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(novoProfissional)
+        });
+
+        if (!resposta.ok) {
+          throw new Error("Não foi possível salvar o profissional.");
+        }
+
+        setMensagem(
+          "Perfil profissional cadastrado com sucesso! Confira na página Encontre profissionais."
+        );
+      } else {
+        // Mantém o cadastro demonstrativo de empresas,
+        // sem guardar senhas no navegador.
+        const dadosEmpresas = JSON.parse(
+          localStorage.getItem("empresas") || "[]"
         );
 
-        const profissionais = Array.isArray(dadosProfissionais)
-          ? dadosProfissionais
+        const empresas = Array.isArray(dadosEmpresas)
+          ? dadosEmpresas
           : [];
 
-        const novoProfissional = {
-          id,
+        const emailExistente = empresas.some(
+          (empresa) =>
+            empresa.email?.toLowerCase() === emailLimpo
+        );
+
+        if (emailExistente) {
+          setErro("Este e-mail já está cadastrado.");
+          return;
+        }
+
+        const novaEmpresa = {
+          id: Date.now(),
           nome: nomeLimpo,
           email: emailLimpo,
-          profissao,
-          disponibilidade
+          tipo: "empresa"
         };
 
         localStorage.setItem(
-          "profissionais",
-          JSON.stringify([
-            ...profissionais,
-            novoProfissional
-          ])
+          "empresas",
+          JSON.stringify([...empresas, novaEmpresa])
+        );
+
+        setMensagem(
+          "Cadastro demonstrativo da empresa realizado com sucesso!"
         );
       }
 
-      setMensagem("Cadastro realizado com sucesso!");
-
       setNome("");
       setEmail("");
-      setSenha("");
       setTipo("profissional");
       setProfissao("");
+      setCidade("");
       setDisponibilidade("");
-    } catch {
-      setErro("Não foi possível realizar o cadastro.");
+      setExperiencia("");
+    } catch (erro) {
+      console.error("Erro ao cadastrar:", erro);
+      setErro(
+        "Não foi possível realizar o cadastro. Verifique se o Back-End está funcionando."
+      );
+    } finally {
+      setSalvando(false);
     }
   }
 
@@ -112,7 +129,7 @@ function Cadastro() {
           Faça parte do Trampo Certo
         </span>
 
-        <h1>Crie sua conta</h1>
+        <h1>Crie seu perfil</h1>
 
         <p>
           Cadastre-se no Trampo Certo para encontrar
@@ -126,13 +143,13 @@ function Cadastro() {
           <h2>Seus dados</h2>
 
           <p>
-            Preencha as informações abaixo para criar
-            sua conta.
+            Preencha as informações abaixo para
+            cadastrar seu perfil.
           </p>
 
           <form onSubmit={cadastrar}>
             <label htmlFor="nome">
-              Nome completo
+              Nome completo ou nome da empresa
             </label>
 
             <input
@@ -154,19 +171,6 @@ function Cadastro() {
               placeholder="Digite seu e-mail"
               value={email}
               onChange={(evento) => setEmail(evento.target.value)}
-              required
-            />
-
-            <label htmlFor="senha">
-              Senha
-            </label>
-
-            <input
-              id="senha"
-              type="password"
-              placeholder="Digite sua senha"
-              value={senha}
-              onChange={(evento) => setSenha(evento.target.value)}
               required
             />
 
@@ -221,6 +225,21 @@ function Cadastro() {
                   </option>
                 </select>
 
+                <label htmlFor="cidade">
+                  Cidade
+                </label>
+
+                <input
+                  id="cidade"
+                  type="text"
+                  placeholder="Ex.: Florianópolis"
+                  value={cidade}
+                  onChange={(evento) =>
+                    setCidade(evento.target.value)
+                  }
+                  required
+                />
+
                 <label htmlFor="disponibilidade">
                   Disponibilidade
                 </label>
@@ -246,14 +265,31 @@ function Cadastro() {
                     Horários flexíveis
                   </option>
                 </select>
+
+                <label htmlFor="experiencia">
+                  Experiência profissional
+                </label>
+
+                <textarea
+                  id="experiencia"
+                  placeholder="Conte um pouco sobre sua experiência"
+                  value={experiencia}
+                  onChange={(evento) =>
+                    setExperiencia(evento.target.value)
+                  }
+                  rows={3}
+                />
               </>
             )}
 
             <button
               type="submit"
               className="cadastro-botao"
+              disabled={salvando}
             >
-              Criar cadastro
+              {salvando
+                ? "Cadastrando..."
+                : "Criar cadastro"}
             </button>
           </form>
 
