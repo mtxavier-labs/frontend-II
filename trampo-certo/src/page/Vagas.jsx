@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
+import {
+  listarVagas,
+  cadastrarVaga
+} from "../services/vagasService.js";
 
 const API_URL = "http://localhost:3000/api/vagas";
+
 
 function Vagas() {
   const [vagas, setVagas] = useState([]);
@@ -14,26 +19,25 @@ function Vagas() {
   const [valor, setValor] = useState("");
   const [idEditando, setIdEditando] = useState(null);
 
-  useEffect(() => {
-    async function carregarVagas() {
-      try {
-        const resposta = await fetch(API_URL);
+  
+useEffect(() => {
+  async function carregarVagas() {
+    try {
+      setErro("");
 
-        if (!resposta.ok) {
-          throw new Error("Erro ao buscar vagas.");
-        }
-
-        const dados = await resposta.json();
-        setVagas(dados);
-      } catch {
-        setErro("Não foi possível carregar as vagas. Verifique se a API está funcionando.");
-      } finally {
-        setCarregando(false);
-      }
+      const dados = await listarVagas();
+      setVagas(dados);
+    } catch {
+      setErro(
+        "Não foi possível carregar as vagas. Verifique se a API está funcionando."
+      );
+    } finally {
+      setCarregando(false);
     }
+  }
 
-    carregarVagas();
-  }, []);
+  carregarVagas();
+}, []);
 
   function limparFormulario() {
     setCargo("");
@@ -74,20 +78,26 @@ function Vagas() {
     setSalvando(true);
 
     try {
-      const resposta = await fetch(endereco, {
-        method: editando ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(dadosVaga)
-      });
+      
+let resultado;
 
-      if (!resposta.ok) {
-        throw new Error("Erro ao salvar vaga.");
-      }
+if (editando) {
+  const resposta = await fetch(endereco, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(dadosVaga)
+  });
 
-      const resultado = await resposta.json();
+  if (!resposta.ok) {
+    throw new Error("Erro ao atualizar vaga.");
+  }
 
+  resultado = await resposta.json();
+} else {
+  resultado = await cadastrarVaga(dadosVaga);
+}
       // O PUT devolve { mensagem, vaga }.
       // O POST devolve diretamente a vaga.
       const vagaSalva = editando ? resultado.vaga : resultado;
