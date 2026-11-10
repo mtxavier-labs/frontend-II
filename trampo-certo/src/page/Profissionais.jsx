@@ -8,6 +8,37 @@ function Profissionais() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
 
+  // FUNÇÃO PARA EXCLUIR PROFISSIONAL DO BANCO E DA TELA
+  async function excluirProfissional(id) {
+    const confirmar = window.confirm(
+      "Deseja realmente excluir este profissional?"
+    );
+
+    if (!confirmar) return;
+
+    setErro("");
+
+    try {
+      const resposta = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!resposta.ok) {
+        throw new Error("Erro ao excluir profissional.");
+      }
+
+      // Remove da tela imediatamente
+      setProfissionais((anteriores) =>
+        anteriores.filter((profissional) => profissional._id !== id)
+      );
+
+      alert("Profissional excluído com sucesso!");
+    } catch (error) {
+      console.error("Erro ao deletar profissional:", error);
+      setErro("Não foi possível excluir o profissional.");
+    }
+  }
+
   useEffect(() => {
     const buscarProfissionais = async () => {
       try {
@@ -48,7 +79,7 @@ function Profissionais() {
       )}
 
       {erro && (
-        <p role="alert">{erro}</p>
+        <p role="alert" className="cadastro-erro">{erro}</p>
       )}
 
       {!carregando && !erro && profissionais.length === 0 && (
@@ -81,11 +112,22 @@ function Profissionais() {
                 {profissional.disponibilidade}
               </p>
 
-              <button
-                onClick={() => setPerfilSelecionado(profissional)}
-              >
-                Ver perfil
-              </button>
+              {/* BOTÕES DE AÇÃO DO CARD */}
+              <div className="vaga-acoes" style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
+                <button
+                  onClick={() => setPerfilSelecionado(profissional)}
+                >
+                  Ver perfil
+                </button>
+
+                <button
+                  className="botao-excluir"
+                  onClick={() => excluirProfissional(profissional._id)}
+                  style={{ backgroundColor: "#dc3545", color: "white" }}
+                >
+                  Excluir
+                </button>
+              </div>
             </article>
           ))}
         </div>
