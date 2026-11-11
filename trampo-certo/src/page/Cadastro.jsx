@@ -1,6 +1,5 @@
 import { useState } from "react";
-
-const API_URL = "http://localhost:3000/api/profissionais";
+import { cadastrarProfissional } from "../services/profissionaisService.js";
 
 function Cadastro() {
   const [nome, setNome] = useState("");
@@ -52,17 +51,7 @@ function Cadastro() {
           experiencia: experiencia.trim()
         };
 
-        const resposta = await fetch(API_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(novoProfissional)
-        });
-
-        if (!resposta.ok) {
-          throw new Error("Não foi possível salvar o profissional.");
-        }
+        await cadastrarProfissional(novoProfissional);
 
         setMensagem(
           "Perfil profissional cadastrado com sucesso! Confira na página Encontre profissionais."
