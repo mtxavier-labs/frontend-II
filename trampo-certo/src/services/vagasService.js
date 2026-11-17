@@ -1,4 +1,3 @@
-
 const API_URL = "http://localhost:3000/api/vagas";
 
 // GET - Buscar todas as vagas
@@ -27,4 +26,37 @@ export async function cadastrarVaga(dadosVaga) {
   }
 
   return resposta.json();
+}
+
+// PUT - Atualizar uma vaga existente
+export async function atualizarVaga(id, dadosVaga) {
+  const resposta = await fetch(`${API_URL}/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(dadosVaga)
+  });
+
+  if (!resposta.ok) {
+    throw new Error("Erro ao atualizar vaga.");
+  }
+
+  const resultado = await resposta.json();
+
+  // O back-end retorna { mensagem, vaga }
+  return resultado.vaga;
+}
+
+// DELETE - Excluir uma vaga
+export async function excluirVaga(id) {
+  const resposta = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE"
+  });
+
+  if (!resposta.ok) {
+    throw new Error("Erro ao excluir vaga.");
+  }
+
+  return true;
 }
