@@ -1,232 +1,162 @@
-# Trampo Certo
+
+# Trampo Certo — Desenvolvimento Front-End II
+
+Projeto acadêmico desenvolvido para a disciplina de
+Desenvolvimento Front-End II, utilizando React, Vite
+e integração com API RESTful.
 
 ## Sobre o projeto
 
-O **Trampo Certo** é uma aplicação web desenvolvida em **React** com o objetivo de aproximar profissionais que procuram oportunidades de trabalho de empresas que precisam contratar trabalhadores para serviços temporários.
+O Trampo Certo é uma plataforma que conecta
+profissionais freelancers a estabelecimentos
+dos setores de hotelaria, gastronomia e eventos.
 
-A proposta é facilitar a busca por vagas e profissionais, tornando o processo de contratação mais simples e organizado.
+Na Sprint 3 (N3), o foco foi integrar o Front-End
+ao Back-End, substituindo a persistência local
+pela comunicação com uma API RESTful.
 
-O projeto está sendo desenvolvido como atividade da disciplina de **Desenvolvimento Front-End II**, do curso de Análise e Desenvolvimento de Sistemas.
+## Integrantes do grupo
 
----
-
-## Problema
-
-Profissionais que trabalham como freelancers ou em serviços temporários, como garçons, cozinheiros e auxiliares de eventos, muitas vezes encontram oportunidades por indicação ou divulgação informal.
-
-Ao mesmo tempo, restaurantes, hotéis, bares e empresas de eventos podem ter dificuldade para encontrar profissionais disponíveis de forma rápida.
-
-O **Trampo Certo** busca facilitar essa conexão entre profissionais e oportunidades por meio de uma plataforma web.
-
----
-
-## Objetivo
-
-Desenvolver uma aplicação simples e intuitiva que permita:
-
-* Visualizar oportunidades de trabalho;
-* Consultar profissionais;
-* Cadastrar informações por meio de formulários;
-* Organizar vagas e profissionais em uma interface única;
-* Facilitar a conexão entre profissionais e empresas.
-
----
+- Fernando Tolentino de Souza Hessmann Dutra
+- Jordana Gonçalves Góes
+- Mateus Suman Carpenter
+- Lucas Ricci
 
 ## Tecnologias utilizadas
 
-* **React 19**
-* **Vite**
-* **JavaScript**
-* **HTML**
-* **CSS**
-* **Git**
-* **GitHub**
+### Front-End
+- React
+- Vite
+- JavaScript
+- HTML
+- CSS
+- Fetch API
 
----
+### Back-End
+- Node.js
+- Express
+- MongoDB
+- Mongoose
 
-##  Funcionalidades
+## Estrutura do repositório
 
-Atualmente, o projeto conta com as seguintes funcionalidades:
+- `trampo-certo/`: aplicação React
+- `Avaliações/`: documentos e relatórios das Sprints
 
-* Página inicial com apresentação do projeto;
-* Página de **Vagas**;
-* Listagem de vagas disponíveis;
-* Página de **Profissionais**;
-* Listagem de profissionais;
-* Página de **Cadastro**;
-* Formulário para cadastro;
-* Navegação entre as páginas;
-* Renderização dinâmica de listas utilizando React;
-* Gerenciamento de estado utilizando `useState`.
+Dentro de `trampo-certo/src`:
 
-O projeto está sendo desenvolvido de forma incremental durante as sprints da disciplina.
+- `components/`: componentes reutilizáveis
+- `page/`: páginas da aplicação
+- `services/`: comunicação com a API RESTful
+- `assets/`: imagens e recursos visuais
 
----
+## Funcionalidades da Sprint 3
 
-##  Arquitetura da aplicação
+### CRUD de vagas
 
-A aplicação utiliza uma estrutura baseada em componentes React.
+- CREATE: cadastrar novas vagas
+- READ: listar vagas disponíveis
+- UPDATE: editar vagas existentes
+- DELETE: excluir vagas cadastradas
 
-A navegação principal é controlada pelo componente `App.jsx`, utilizando estado para determinar qual página será exibida.
+As operações utilizam a API RESTful do Back-End.
 
-```text
-App
-├── Navbar
-├── Home
-├── Vagas
-├── Profissionais
-└── Cadastro
-```
+### Tratamento de erros
 
-Os componentes estão organizados da seguinte forma:
+O sistema apresenta mensagens quando a API
+está indisponível ou uma operação falha.
 
-```text
-src/
-├── components/
-│   ├── Card.jsx
-│   └── Navbar.jsx
-│
-├── page/
-│   ├── Cadastro.jsx
-│   ├── Home.jsx
-│   ├── Profissionais.jsx
-│   └── Vagas.jsx
-│
-├── assets/
-├── App.jsx
-├── App.css
-├── index.css
-└── main.jsx
-```
+### Outras funcionalidades
 
----
-
-## Estrutura do projeto
-
-```text
-trampo-certo/
-├── public/
-│   ├── favicon.svg
-│   └── icons.svg
-│
-├── src/
-│   ├── assets/
-│   │   ├── hero.png
-│   │   ├── react.svg
-│   │   └── vite.svg
-│   │
-│   ├── components/
-│   │   ├── Card.jsx
-│   │   └── Navbar.jsx
-│   │
-│   ├── page/
-│   │   ├── Cadastro.jsx
-│   │   ├── Home.jsx
-│   │   ├── Profissionais.jsx
-│   │   └── Vagas.jsx
-│   │
-│   ├── App.css
-│   ├── App.jsx
-│   ├── index.css
-│   └── main.jsx
-│
-├── .gitignore
-├── eslint.config.js
-├── index.html
-├── package.json
-├── package-lock.json
-└── vite.config.js
-```
-
----
+- Navegação entre páginas
+- Visualização de profissionais
+- Formulários de cadastro
+- Interface responsiva conforme os estilos implementados
 
 ## Como executar o projeto
 
-### 1. Clonar o repositório
+### Pré-requisitos
+
+- Node.js e npm instalados
+- Back-End configurado e funcionando
+- Acesso ao banco MongoDB
+
+### 1. Clonar o Front-End
 
 ```bash
-git clone https://github.com/j0rdanaaa/frontend-II.git
-```
-
-### 2. Entrar na pasta do projeto
-
-```bash
+git clone https://github.com/mtxavier-labs/frontend-II.git
 cd frontend-II/trampo-certo
 ```
 
-### 3. Instalar as dependências
+### 2. Instalar as dependências
 
 ```bash
 npm install
 ```
 
-### 4. Executar o projeto
+### 3. Iniciar o Back-End
+
+O Back-End está disponível em:
+
+https://github.com/j0rdanaaa/trampo-certo-backend
+
+Clone o repositório separadamente, instale
+as dependências e configure o arquivo `.env`
+com as variáveis necessárias para o MongoDB.
+
+Inicie a API com:
+
+```bash
+npm start
+```
+
+A API deve estar disponível em:
+
+http://localhost:3000
+
+### 4. Iniciar o Front-End
+
+No terminal da pasta `trampo-certo`:
 
 ```bash
 npm run dev
 ```
 
-Após executar o comando, o Vite disponibilizará um endereço local para acessar a aplicação no navegador.
+Abra o endereço exibido pelo Vite,
+geralmente:
 
-Normalmente:
-
-```text
 http://localhost:5173
-```
 
----
+## Integração com a API
 
-## Desenvolvimento por sprints
+O arquivo `src/services/vagasService.js`
+centraliza as requisições HTTP:
 
-O desenvolvimento do **Trampo Certo** ocorre de forma incremental, acompanhando as atividades propostas na disciplina de Desenvolvimento Front-End II.
+| Operação | Método | Endpoint |
+|---|---|---|
+| Listar vagas | GET | /api/vagas |
+| Cadastrar vaga | POST | /api/vagas |
+| Atualizar vaga | PUT | /api/vagas/:id |
+| Excluir vaga | DELETE | /api/vagas/:id |
 
-### Sprint 1
+A URL base utilizada no desenvolvimento é:
 
-* Estrutura inicial do projeto React;
-* Configuração do Vite;
-* Criação da interface inicial;
-* Desenvolvimento dos componentes;
-* Organização das páginas;
-* Implementação da navegação;
-* Utilização de estados e eventos.
+http://localhost:3000/api/vagas
 
-### Sprint 2
+## Observações
 
-* Desenvolvimento da página de vagas;
-* Desenvolvimento da página de profissionais;
-* Criação do formulário de cadastro;
-* Renderização dinâmica das informações;
-* Utilização de `useState`;
-* Aprimoramento da interface e interação com o usuário.
+- O Back-End precisa estar ativo para consultar
+  e modificar as vagas.
+- A persistência das vagas é realizada no MongoDB.
+- O botão de candidatura é demonstrativo e
+  ainda não registra candidaturas na API.
 
----
+## Disciplina
 
-## Próximos passos
+Desenvolvimento Front-End II
 
-O projeto poderá receber novas funcionalidades durante sua evolução, como:
+Professor: Saulo
 
-* Persistência dos dados;
-* Maior reutilização dos componentes;
-* Integração com back-end;
-* Sistema de autenticação;
-* Melhorias na busca e filtragem de vagas e profissionais;
-* Aprimoramentos de acessibilidade e responsividade.
+Entrega: Sprint 3 — N3
 
----
-
-## Integrantes
-
-* Fernando
-* Jordana Gonçalves Góes
-* Lucas
-* Mateus
-
----
-
-## Informações acadêmicas
-
-**Disciplina:** Desenvolvimento Front-End II
-
-**Curso:** Análise e Desenvolvimento de Sistemas — ADS31
-
-**Instituição:** UNICESUSC
+Data da apresentação: 17/11/2026
