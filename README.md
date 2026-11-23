@@ -23,7 +23,7 @@ Para a avaliação das Sprints, siga os passos abaixo para executar a aplicaçã
 
 1. Clone este repositório:
    ```bash
-   git clone https://github.com/mscarpenter/frontend-II.git
+   git clone git clone https://github.com/mtxavier-labs/frontend-II.git
    ```
 
 2. Acesse a pasta do projeto React:
