@@ -1,162 +1,273 @@
+# 💼 Trampo Certo — Desenvolvimento Front-End II
 
-# Trampo Certo — Desenvolvimento Front-End II
+Projeto acadêmico desenvolvido na disciplina de **Desenvolvimento Front-End II**, do curso de **Análise e Desenvolvimento de Sistemas da UNICESUSC**.
 
-Projeto acadêmico desenvolvido para a disciplina de
-Desenvolvimento Front-End II, utilizando React, Vite
-e integração com API RESTful.
+O **Trampo Certo** é uma plataforma web em desenvolvimento que busca conectar estabelecimentos dos setores de hotelaria, gastronomia e eventos a profissionais freelancers interessados em oportunidades de trabalho temporário.
 
-## Sobre o projeto
+O projeto também integra as atividades do **Projeto Multidisciplinar Integrador III (PMI III)**.
 
-O Trampo Certo é uma plataforma que conecta
-profissionais freelancers a estabelecimentos
-dos setores de hotelaria, gastronomia e eventos.
+---
 
-Na Sprint 3 (N3), o foco foi integrar o Front-End
-ao Back-End, substituindo a persistência local
-pela comunicação com uma API RESTful.
+## 🎯 Objetivo
 
-## Integrantes do grupo
+Desenvolver uma aplicação web moderna, funcional e intuitiva para facilitar a divulgação de vagas temporárias e a visualização de perfis profissionais.
+
+A aplicação utiliza React no Front-end e se comunica com uma API REST desenvolvida em Node.js e Express, com persistência de dados no MongoDB Atlas.
+
+---
+
+## 🛠️ Tecnologias utilizadas
+
+- JavaScript
+- React.js
+- Vite
+- HTML5
+- CSS3
+- Node.js e Express (API integrada)
+- MongoDB Atlas (persistência via Back-end)
+- Git e GitHub
+- Visual Studio Code
+
+---
+
+## ✅ Funcionalidades desenvolvidas
+
+### 📋 Gestão de vagas
+
+- [x] Visualização de vagas disponíveis
+- [x] Cadastro de novas vagas
+- [x] Edição de vagas existentes
+- [x] Exclusão de vagas
+- [x] Integração com API REST
+- [x] Persistência das alterações no banco de dados
+- [x] Mensagens de feedback e erro
+
+### 👤 Profissionais
+
+- [x] Cadastro de perfil profissional básico
+- [x] Listagem de profissionais
+- [x] Visualização de informações dos profissionais
+- [x] Integração com a API de profissionais
+
+### 🖥️ Interface
+
+- [x] Navegação entre páginas
+- [x] Componentização com React
+- [x] Gerenciamento de estados
+- [x] Formulários interativos
+- [x] Consumo de API REST
+
+---
+
+## 📚 Evolução das Sprints
+
+### Sprint 1 — N1: Estrutura inicial
+
+Etapa dedicada à criação da estrutura do projeto React, organização das páginas e desenvolvimento inicial dos componentes.
+
+**Principais objetivos:**
+- Configuração do projeto React com Vite
+- Criação da navegação
+- Desenvolvimento inicial da interface
+- Utilização de componentes, estados e eventos
+
+O documento da N1 contém um registro retrospectivo, pois o relatório original não foi localizado.
+
+### Sprint 2 — N2: CRUD local
+
+Evolução da aplicação com operações de cadastro, listagem, edição e exclusão de informações.
+
+**Principais objetivos:**
+- Implementação de formulários
+- Gerenciamento de dados com React
+- Operações CRUD
+- Persistência local com LocalStorage
+
+### Sprint 3 — N3: Integração com API REST
+
+Integração do Front-end com o Back-end do Trampo Certo.
+
+**Funcionalidades trabalhadas:**
+- Consumo de endpoints HTTP
+- Listagem de vagas armazenadas no MongoDB
+- Cadastro de vagas pela interface
+- Atualização e exclusão de vagas
+- Tratamento de erros nas requisições
+- Atualização da interface após operações CRUD
+
+A integração permite que as informações sejam armazenadas no banco de dados, substituindo a persistência exclusivamente local utilizada nas etapas anteriores para o gerenciamento de vagas.
+
+---
+
+## 📂 Estrutura do repositório
+
+```text
+frontend-II/
+|
+|-- Avaliações/
+|   |-- N1/
+|   |   |-- README.md
+|   |-- N2/
+|   |   |-- README.md
+|   |-- N3/
+|       |-- README.md
+|
+|-- trampo-certo/
+|   |-- src/
+|   |   |-- components/
+|   |   |-- pages/
+|   |   |-- services/
+|   |   |-- assets/
+|   |
+|   |-- package.json
+|   |-- README.md
+|
+|-- README.md
+```
+
+A pasta `trampo-certo` contém a aplicação React, enquanto a pasta `Avaliações` reúne os registros e documentos referentes às Sprints.
+
+---
+
+## 🏗️ Arquitetura da aplicação
+
+```text
+        USUÁRIO
+           |
+           v
+    FRONT-END REACT
+       Vite + JSX
+    localhost:5173
+           |
+           | Requisições HTTP / JSON
+           v
+      API REST
+   Node.js + Express
+    localhost:3000
+           |
+           v
+        Mongoose
+           |
+           v
+      MongoDB Atlas
+```
+
+### Integração com o Back-end
+
+A aplicação realiza requisições HTTP para os endpoints disponibilizados pela API do Trampo Certo.
+
+**Exemplos de endpoints:**
+
+| Método | Endpoint | Descrição |
+|---|---|---|
+| GET | `/api/vagas` | Listar vagas |
+| POST | `/api/vagas` | Cadastrar vaga |
+| PUT | `/api/vagas/:id` | Atualizar vaga |
+| DELETE | `/api/vagas/:id` | Excluir vaga |
+| GET | `/api/profissionais` | Listar profissionais |
+| POST | `/api/profissionais` | Cadastrar profissional |
+
+---
+
+## ▶️ Como executar o projeto
+
+### Pré-requisitos
+
+- Node.js instalado
+- npm instalado
+- Git instalado
+- Back-end configurado para utilizar as funcionalidades integradas
+
+### 1. Clonar o repositório
+
+```bash
+git clone https://github.com/mtxavier-labs/frontend-II.git
+```
+
+### 2. Acessar a pasta da aplicação
+
+```bash
+cd frontend-II/trampo-certo
+```
+
+### 3. Instalar as dependências
+
+```bash
+npm install
+```
+
+### 4. Executar o Front-end
+
+```bash
+npm run dev
+```
+
+O terminal exibirá o endereço local da aplicação, geralmente:
+
+http://localhost:5173
+
+### 5. Executar o Back-end
+
+Em outro terminal, acesse o repositório do Back-end, configure as variáveis de ambiente e execute:
+
+```bash
+node server.js
+```
+
+A API deverá estar disponível em:
+
+http://localhost:3000
+
+**Importante:** para que as funcionalidades integradas funcionem corretamente, o Back-end precisa estar ativo e conectado ao MongoDB Atlas.
+
+---
+
+## 🎨 Protótipo no Figma
+
+O Trampo Certo possui um protótipo de interface desenvolvido no Figma, contemplando os fluxos planejados para profissionais e estabelecimentos.
+
+[Visualizar protótipo no Figma](https://www.figma.com/design/F7aKBHRfve0HyHCHWe4EWh/Untitled?node-id=0-1)
+
+---
+
+## 🧭 Funcionalidades planejadas
+
+A plataforma continua em desenvolvimento.
+
+Algumas funcionalidades previstas para versões futuras incluem:
+
+- [ ] Login e autenticação completos
+- [ ] Candidatura às vagas com persistência
+- [ ] Seleção de candidatos pelos estabelecimentos
+- [ ] Histórico de serviços
+- [ ] Sistema de avaliações
+- [ ] Pagamentos integrados
+- [ ] Notificações
+- [ ] Filtros avançados de oportunidades
+
+Essas funcionalidades não devem ser confundidas com as entregas já implementadas.
+
+---
+
+## 🤝 Integrantes — Front-End II
 
 - Fernando Tolentino de Souza Hessmann Dutra
 - Jordana Gonçalves Góes
 - Mateus Suman Carpenter
 - Lucas Ricci
 
-## Tecnologias utilizadas
+**Curso:** Análise e Desenvolvimento de Sistemas  
+**Instituição:** UNICESUSC  
+**Disciplina:** Desenvolvimento Front-End II  
+**Ano:** 2026
 
-### Front-End
-- React
-- Vite
-- JavaScript
-- HTML
-- CSS
-- Fetch API
+---
 
-### Back-End
-- Node.js
-- Express
-- MongoDB
-- Mongoose
+## 🔗 Repositórios relacionados
 
-## Estrutura do repositório
+- [Front-end — Trampo Certo](https://github.com/mtxavier-labs/frontend-II)
+- [Back-end — Trampo Certo](https://github.com/j0rdanaaa/trampo-certo-backend)
 
-- `trampo-certo/`: aplicação React
-- `Avaliações/`: documentos e relatórios das Sprints
+---
 
-Dentro de `trampo-certo/src`:
-
-- `components/`: componentes reutilizáveis
-- `page/`: páginas da aplicação
-- `services/`: comunicação com a API RESTful
-- `assets/`: imagens e recursos visuais
-
-## Funcionalidades da Sprint 3
-
-### CRUD de vagas
-
-- CREATE: cadastrar novas vagas
-- READ: listar vagas disponíveis
-- UPDATE: editar vagas existentes
-- DELETE: excluir vagas cadastradas
-
-As operações utilizam a API RESTful do Back-End.
-
-### Tratamento de erros
-
-O sistema apresenta mensagens quando a API
-está indisponível ou uma operação falha.
-
-### Outras funcionalidades
-
-- Navegação entre páginas
-- Visualização de profissionais
-- Formulários de cadastro
-- Interface responsiva conforme os estilos implementados
-
-## Como executar o projeto
-
-### Pré-requisitos
-
-- Node.js e npm instalados
-- Back-End configurado e funcionando
-- Acesso ao banco MongoDB
-
-### 1. Clonar o Front-End
-
-```bash
-git clone https://github.com/mtxavier-labs/frontend-II.git
-cd frontend-II/trampo-certo
-```
-
-### 2. Instalar as dependências
-
-```bash
-npm install
-```
-
-### 3. Iniciar o Back-End
-
-O Back-End está disponível em:
-
-https://github.com/j0rdanaaa/trampo-certo-backend
-
-Clone o repositório separadamente, instale
-as dependências e configure o arquivo `.env`
-com as variáveis necessárias para o MongoDB.
-
-Inicie a API com:
-
-```bash
-npm start
-```
-
-A API deve estar disponível em:
-
-http://localhost:3000
-
-### 4. Iniciar o Front-End
-
-No terminal da pasta `trampo-certo`:
-
-```bash
-npm run dev
-```
-
-Abra o endereço exibido pelo Vite,
-geralmente:
-
-http://localhost:5173
-
-## Integração com a API
-
-O arquivo `src/services/vagasService.js`
-centraliza as requisições HTTP:
-
-| Operação | Método | Endpoint |
-|---|---|---|
-| Listar vagas | GET | /api/vagas |
-| Cadastrar vaga | POST | /api/vagas |
-| Atualizar vaga | PUT | /api/vagas/:id |
-| Excluir vaga | DELETE | /api/vagas/:id |
-
-A URL base utilizada no desenvolvimento é:
-
-http://localhost:3000/api/vagas
-
-## Observações
-
-- O Back-End precisa estar ativo para consultar
-  e modificar as vagas.
-- A persistência das vagas é realizada no MongoDB.
-- O botão de candidatura é demonstrativo e
-  ainda não registra candidaturas na API.
-
-## Disciplina
-
-Desenvolvimento Front-End II
-
-Professor: Saulo
-
-Entrega: Sprint 3 — N3
-
-Data da apresentação: 17/11/2026
+**💼 Trampo Certo — Conectando oportunidades e profissionais.**
