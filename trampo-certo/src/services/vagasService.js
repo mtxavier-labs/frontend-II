@@ -1,4 +1,6 @@
-const API_URL = "http://localhost:3000/api/vagas";
+import { API_BASE_URL } from "./api.js";
+
+const API_URL = `${API_BASE_URL}/api/vagas`;
 
 // GET - Buscar todas as vagas
 export async function listarVagas() {
