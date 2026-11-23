@@ -5,7 +5,7 @@ Este repositório é destinado ao armazenamento das atividades, projetos e avali
 ## Integrantes do Grupo
 * Fernando Tolentino de Souza Hessmann Dutra
 * Jordana Gonçalves Góes
-* Mateus Suman Carpenter
+* Matheus Henrique Xavier 
 * Lucas Ricci
 
 ## Estrutura do Repositório
