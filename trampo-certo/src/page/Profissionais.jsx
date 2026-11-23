@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import { API_BASE_URL } from "../services/api.js";
 
-const API_URL = "http://localhost:3000/api/profissionais";
+const API_URL = `${API_BASE_URL}/api/profissionais`;
 
 function Profissionais() {
   const [profissionais, setProfissionais] = useState([]);

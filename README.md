@@ -42,3 +42,13 @@ Para a avaliação das Sprints, siga os passos abaixo para executar a aplicaçã
    ```
 
 5. O terminal exibirá um link (geralmente `http://localhost:5173`). Clique ou copie-o para o seu navegador para visualizar o projeto.
+
+
+---
+
+## 🚀 Deploy na Vercel
+
+- Na Vercel, importe este repositório com **Root Directory = `trampo-certo`** (framework Vite).
+- Defina a variável de ambiente **`VITE_API_URL`** com a URL do Back-End publicado (ex.: `https://trampo-certo-api.vercel.app`, sem `/` no final).
+- Localmente, sem essa variável, o Front-End usa `http://localhost:3000`.
+- Passo a passo completo (incluindo MongoDB Atlas e CORS): [DEPLOY_VERCEL.md no repositório do Back-End](https://github.com/j0rdanaaa/trampo-certo-backend/blob/main/DEPLOY_VERCEL.md).
